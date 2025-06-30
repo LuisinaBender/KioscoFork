@@ -10,6 +10,9 @@ using System.Drawing;
 using System.Text;
 using System.Text.Json.Serialization;
 
+DotNetEnv.Env.Load(); // Cargar variables de entorno desde el archivo .env
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 //// Cargar configuración JWT del archivo de configuración
@@ -36,9 +39,19 @@ var builder = WebApplication.CreateBuilder(args);
 //        IssuerSigningKey = new SymmetricSecurityKey(key)
 //    };
 //});
-FirebaseApp.Create(new AppOptions()
+
+var firebaseJson = Environment.GetEnvironmentVariable("GOOGLE_CREDENTIALS");
+
+if (string.IsNullOrWhiteSpace(firebaseJson))
 {
-    Credential = GoogleCredential.FromFile("Firebase/kiscoinformatico-firebase-adminsdk-y7p04-26d7e7d5c5.json")
+    throw new Exception("Falta la variable GOOGLE_CREDENTIALS");
+}
+
+var credential = GoogleCredential.FromJson(firebaseJson);
+
+FirebaseApp.Create(new AppOptions
+{
+    Credential = credential
 });
 
 builder.Services
