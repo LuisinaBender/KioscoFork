@@ -1,5 +1,5 @@
 ﻿@page "/clientes"
-@inject IClienteService ClienteService
+@inject IGenericService<Cliente> ClienteService
 @inject NavigationManager NavigationManager
 @inject SweetAlertService SweetAlert
 
@@ -47,11 +47,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        clientes = await ClienteService.GetAllAsync();
+        
+        clientes = await ClienteService.GetAllAsync(string.Empty); // Se pasa un filtro vacío
     }
     private void AgregarCliente()
     {
-        // Redirigir a la página para agregar una nueva localidad
+        
         NavigationManager.NavigateTo("/nuevoeditarcliente");
     }
     private async Task Eliminar(Cliente cliente)
@@ -69,7 +70,7 @@ else
         if (respuesta.IsConfirmed)
         {
             await ClienteService.DeleteAsync(cliente.Id);
-            clientes = await ClienteService.GetAllAsync();
+            clientes = await ClienteService.GetAllAsync(string.Empty); // Se pasa un filtro vacío
             StateHasChanged();
         }
     }
