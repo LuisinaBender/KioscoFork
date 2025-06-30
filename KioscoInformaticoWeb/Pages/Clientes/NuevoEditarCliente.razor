@@ -1,5 +1,5 @@
 ﻿@page "/nuevoeditarcliente"
-@inject IClienteService ClienteService
+@inject IGenericService<Cliente> ClienteService
 @inject IGenericService<Localidad> LocalidadService
 @inject NavigationManager NavigationManager
 @inject SweetAlertService SweetAlert
@@ -62,12 +62,12 @@ else
         }
         else
         {
-             cliente = new Cliente();
+              cliente = new Cliente();
         }
-        localidades = await LocalidadService.GetAllAsync();
+        
+        // Proporcionar un argumento para el parámetro requerido "filtro"
+        localidades = await LocalidadService.GetAllAsync(null);
     }
-
-
 
     private async Task Guardar()
     {

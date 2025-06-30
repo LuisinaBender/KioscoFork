@@ -64,12 +64,13 @@ namespace KioscoInformaticoDesktop.Views
 
         }
 
-        private async Task ConectarConDb()
+        public async Task ConectarConDb()
         {
             await Task.Run(async () =>
             {
-                ClienteService clienteService = new ClienteService();
-                var clientes = await clienteService.GetAllAsync();
+                IGenericService<Cliente> clienteService = new GenericService<Cliente>();
+                
+                var clientes = await clienteService.GetAllAsync("");
                 dataReady = true;
             });
         }

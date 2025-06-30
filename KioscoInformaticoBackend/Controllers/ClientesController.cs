@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.DataContext;
 using Service.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientesController : ControllerBase
     {
         private readonly KioscoContext _context;
@@ -25,14 +27,11 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes([FromQuery] string? filtro="")
         {
-            if (filtro != null)
             {
                 return await _context.Clientes.Include(c => c.Localidad)
                     .Where(c => c.Nombre.ToUpper().Contains(filtro.ToUpper()))
                     .ToListAsync();
             }
-            return await _context.Clientes.Include(c => c.Localidad)
-                .ToListAsync();
         }
 
         // GET: api/Clientes/5
@@ -54,11 +53,17 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int? id, Cliente cliente)
         {
-            if(id==null || cliente == null)
+            if (cliente == null)
             {
-                //throw new ArgumentNullException();
+                throw new ArgumentNullException();
+            }
+
+            if (id==null)
+            {
                 return BadRequest();
             }
+           
+
             if (id != cliente.Id)
             {
                 return BadRequest();
