@@ -5,6 +5,7 @@ namespace KioscoInformaticoDesktop
 {
     public partial class MenuPrincipalView : Form
     {
+
         public MenuPrincipalView()
         {
             InitializeComponent();
